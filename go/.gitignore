@@ -1,0 +1,5 @@
+.env
+go-todos
+.DS_Store
+tmp
+
