@@ -18,16 +18,16 @@ type apiConfig struct {
 }
 
 func main() {
-	godotenv.Load()
+	godotenv.Load("../.env")
 
-	portString := os.Getenv("PORT")
+	portString := os.Getenv("GO_PORT")
 	if portString == "" {
-		log.Fatal("PORT was not found in environment")
+		log.Fatal("GO_PORT was not found in environment")
 	}
 
-	dbURL := os.Getenv("DB_URL")
+	dbURL := os.Getenv("GO_DB_URL")
 	if dbURL == "" {
-		log.Fatal("DB_URL was not found in environment")
+		log.Fatal("GO_DB_URL was not found in environment")
 	}
 
 	conn, err := sql.Open("postgres", dbURL)
@@ -62,6 +62,7 @@ func main() {
 
 	v1Router.Post("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerCreateFeedFollow))
 	v1Router.Get("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerGetFeedFollows))
+	v1Router.Delete("/feed_follows/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFeedFollows))
 
 	router.Mount("/v1", v1Router)
 

@@ -1,7 +1,7 @@
 # Use postgres/example user/password credentials
 services:
 
-  db:
+  go_db:
     image: postgres
     restart: always
     # set shared memory limit when using docker-compose
@@ -17,6 +17,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_USER=${DB_USER}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_DB=${GO_DB_NAME}
 
 
