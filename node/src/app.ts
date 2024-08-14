@@ -1,10 +1,12 @@
 import cors, { type CorsOptions } from "cors";
 import compression from "compression";
 import dotenv from "dotenv";
+import { json } from 'body-parser'
 import express from "express";
 
 // Project dependencies
 import healthRouter from "./routes/health";
+import { errorHandler } from "./middleware/error";
 
 // Environment variable initialization
 const env_vars = dotenv.config({ path: "../.env" });
@@ -28,9 +30,13 @@ const corsOptions: CorsOptions = {
 };
 app.use(cors({ ...corsOptions }));
 app.use(compression());
-// app.use('global error handler');
-
+app.use(json());
 
 // Routes
 // app.use(userRouter);
 app.use(healthRouter);
+
+// Error handling
+app.use(errorHandler);
+
+export default app;
