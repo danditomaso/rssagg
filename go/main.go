@@ -25,9 +25,9 @@ func main() {
 		log.Fatal("GO_PORT was not found in environment")
 	}
 
-	dbURL := os.Getenv("GO_DB_URL")
+	dbURL := os.Getenv("GO_DB_URI")
 	if dbURL == "" {
-		log.Fatal("GO_DB_URL was not found in environment")
+		log.Fatal("GO_DB_URI was not found in environment")
 	}
 
 	conn, err := sql.Open("postgres", dbURL)

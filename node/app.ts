@@ -5,8 +5,8 @@ import { json } from 'body-parser'
 import express from "express";
 
 // Project dependencies
-import healthRouter from "./routes/health";
-import { errorHandler } from "./middleware/error";
+import healthRouter from "./src/routes/health";
+import { errorHandler } from "./src/middleware/error";
 
 // Environment variable initialization
 const env_vars = dotenv.config({ path: "../.env" });
@@ -30,7 +30,16 @@ const corsOptions: CorsOptions = {
 };
 app.use(cors({ ...corsOptions }));
 app.use(compression());
+app.use(json({ limit: '25mb' }));
 app.use(json());
+
+// 404 Route
+app.use('*', (req, res) => {
+  res.status(404).json({
+    message: `Can't find ${req.originalUrl} this route`,
+  });
+});
+
 
 // Routes
 // app.use(userRouter);
