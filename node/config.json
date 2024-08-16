@@ -7,6 +7,5 @@
 		}
 	],
 	"srcDir": "./src/sql/queries",
-	"failOnError": true,
-	"dbUrl": "postgres://admin:postgres@localhost:5432/node_rssagg?sslmode=disable"
+	"failOnError": true
 }

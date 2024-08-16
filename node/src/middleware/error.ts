@@ -1,9 +1,9 @@
 /** src/middlewares/errors.ts **/
 import type { NextFunction, Request, Response } from "express";
-import type { CustomError } from "../errors/CustomError";
+import type { AppError } from "../errors/CustomErrorBase";
 
 export const errorHandler = (
-  err: CustomError,
+  err: AppError,
   req: Request,
   res: Response,
   next: NextFunction,

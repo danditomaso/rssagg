@@ -2,7 +2,7 @@ import { type Request, type Response, Router } from "express";
 
 const router = Router();
 
-const getHandler = async (_: Request, res: Response) => {
+async function handlerReadiness(_: Request, res: Response) {
   try {
     return res.status(200).send("Healthy");
   } catch (err) {
@@ -24,6 +24,6 @@ const getHandler = async (_: Request, res: Response) => {
 //   userData.push(newUser);
 //   return res.status(201).send({ data: newUser });
 // };
-router.get("/health", getHandler);
+router.get("/health", handlerReadiness);
 
 export default router;

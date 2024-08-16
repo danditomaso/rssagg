@@ -1,21 +1,19 @@
 import cors, { type CorsOptions } from "cors";
 import compression from "compression";
-import dotenv from "dotenv";
-import { json } from 'body-parser'
 import express from "express";
 
 // Project dependencies
-import healthRouter from "./src/routes/health";
-import { errorHandler } from "./src/middleware/error";
+import healthRouter from "./routes/health";
+import userRouter from "./routes/users";
+import { errorHandler } from "./middleware/error";
+import envVars from "./envVars";
 
 // Environment variable initialization
-const env_vars = dotenv.config({ path: "../.env" });
-const port = env_vars?.parsed ? env_vars.parsed.NODE_PORT : "";
+const port = envVars?.NODE_PORT
 
 // Express initialization
 const app = express();
 app.listen(port, () => {
-
   console.log(`Server is running on port ${port}`);
 });
 
@@ -28,22 +26,23 @@ const corsOptions: CorsOptions = {
   credentials: false,
   maxAge: 300
 };
+
 app.use(cors({ ...corsOptions }));
 app.use(compression());
-app.use(json({ limit: '25mb' }));
-app.use(json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '25mb' }));
 
 // 404 Route
-app.use('*', (req, res) => {
-  res.status(404).json({
-    message: `Can't find ${req.originalUrl} this route`,
-  });
-});
+// app.use('*', (req, res) => {
+//   res.status(404).json({
+//     message: `Can't find ${req.originalUrl} this route`,
+//   });
+// });
 
 
 // Routes
-// app.use(userRouter);
-app.use(healthRouter);
+app.use('/v1', userRouter);
+app.use('/v1', healthRouter);
 
 // Error handling
 app.use(errorHandler);
