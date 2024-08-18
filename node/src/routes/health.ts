@@ -1,29 +1,15 @@
-import { type Request, type Response, Router } from "express";
+import express, { type Request, type Response, Router } from "express";
 
-const router = Router();
+const healthRouter = express.Router();
 
 async function handlerReadiness(_: Request, res: Response) {
   try {
-    return res.status(200).send("Healthy");
+    return res.status(200).json("Healthy");
   } catch (err) {
-    return res.status(500).send({ message: err });
+    return res.status(500).json({ message: err });
   }
 };
 
-// const postHandler = (req: Request, res: Response) => {
-//   const { name } = req.body;
-//   if (!name) {
-//     return res.status(400).send({ message: "Name is required!" });
-//   }
+healthRouter.get("/", handlerReadiness);
 
-//   const newUser = {
-//     id: userData.length + 1,
-//     name,
-//   };
-
-//   userData.push(newUser);
-//   return res.status(201).send({ data: newUser });
-// };
-router.get("/health", handlerReadiness);
-
-export default router;
+export { healthRouter };

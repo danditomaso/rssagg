@@ -7,7 +7,7 @@ interface Client {
 export const createFeedFollowQuery = `-- name: CreateFeedFollow :one
 INSERT INTO feed_follows (id, created_at, updated_at, user_id, feed_id)
 VALUES ($1, $2, $3, $4, $5)
-RETURNING id, created_at, updated_at, user_id, feed_id`;
+RETURNING id, created_at, updated_at, user_id, feed_id, last_fetched_at`;
 
 export interface CreateFeedFollowArgs {
     id: string;
@@ -23,16 +23,14 @@ export interface CreateFeedFollowRow {
     updatedAt: Date;
     userId: string;
     feedId: string;
+    lastFetchedAt: Date | null;
 }
 
-export async function createFeedFollow(
-    client: Client,
-    args: CreateFeedFollowArgs,
-): Promise<CreateFeedFollowRow | null> {
+export async function createFeedFollow(client: Client, args: CreateFeedFollowArgs): Promise<CreateFeedFollowRow | null> {
     const result = await client.query({
         text: createFeedFollowQuery,
         values: [args.id, args.createdAt, args.updatedAt, args.userId, args.feedId],
-        rowMode: "array",
+        rowMode: "array"
     });
     if (result.rows.length !== 1) {
         return null;
@@ -44,11 +42,12 @@ export async function createFeedFollow(
         updatedAt: row[2],
         userId: row[3],
         feedId: row[4],
+        lastFetchedAt: row[5]
     };
 }
 
 export const getFeedFollowsQuery = `-- name: GetFeedFollows :many
-SELECT id, created_at, updated_at, user_id, feed_id FROM feed_follows WHERE user_id=$1`;
+SELECT id, created_at, updated_at, user_id, feed_id, last_fetched_at FROM feed_follows WHERE user_id=$1`;
 
 export interface GetFeedFollowsArgs {
     userId: string;
@@ -60,24 +59,23 @@ export interface GetFeedFollowsRow {
     updatedAt: Date;
     userId: string;
     feedId: string;
+    lastFetchedAt: Date | null;
 }
 
-export async function getFeedFollows(
-    client: Client,
-    args: GetFeedFollowsArgs,
-): Promise<GetFeedFollowsRow[]> {
+export async function getFeedFollows(client: Client, args: GetFeedFollowsArgs): Promise<GetFeedFollowsRow[]> {
     const result = await client.query({
         text: getFeedFollowsQuery,
         values: [args.userId],
-        rowMode: "array",
+        rowMode: "array"
     });
-    return result.rows.map((row) => {
+    return result.rows.map(row => {
         return {
             id: row[0],
             createdAt: row[1],
             updatedAt: row[2],
             userId: row[3],
             feedId: row[4],
+            lastFetchedAt: row[5]
         };
     });
 }
@@ -90,13 +88,11 @@ export interface DeleteFeedFollowArgs {
     userId: string;
 }
 
-export async function deleteFeedFollow(
-    client: Client,
-    args: DeleteFeedFollowArgs,
-): Promise<void> {
+export async function deleteFeedFollow(client: Client, args: DeleteFeedFollowArgs): Promise<void> {
     await client.query({
         text: deleteFeedFollowQuery,
         values: [args.id, args.userId],
-        rowMode: "array",
+        rowMode: "array"
     });
 }
+

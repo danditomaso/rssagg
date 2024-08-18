@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { handlerCreateUser, handlerGetUserByAPIKey } from "../controllers/handler_users";
-import authentication from "../middleware/authentication";
+import requireAuth from "../middleware/auth";
 
-const router = Router();
+const usersRouter = Router();
 
-router.post("/users", handlerCreateUser);
-router.get("/users", authentication, handlerGetUserByAPIKey);
+usersRouter.post("/", handlerCreateUser);
+usersRouter.get("/", requireAuth, handlerGetUserByAPIKey);
 
-export default router;
+export { usersRouter };

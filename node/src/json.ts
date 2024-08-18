@@ -10,9 +10,11 @@ export function respondWithJSON<T>(
   code: number,
   payload: Record<string, T>
 ) {
+  console.log('payload', payload);
+
   if (code > 499) {
     logger.trace("Responding with 5XX error");
-    return res.status(code).json({ payload });
+    return res.status(code).json({ ...payload });
   }
 
   try {

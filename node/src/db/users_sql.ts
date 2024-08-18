@@ -1,4 +1,4 @@
-import type { QueryArrayConfig, QueryArrayResult } from "pg";
+import { QueryArrayConfig, QueryArrayResult } from "pg";
 
 interface Client {
     query: (config: QueryArrayConfig) => Promise<QueryArrayResult>;
@@ -24,14 +24,11 @@ export interface CreateUserRow {
     apiKey: string;
 }
 
-export async function createUser(
-    client: Client,
-    args: CreateUserArgs,
-): Promise<CreateUserRow | null> {
+export async function createUser(client: Client, args: CreateUserArgs): Promise<CreateUserRow | null> {
     const result = await client.query({
         text: createUserQuery,
         values: [args.id, args.createdAt, args.updatedAt, args.name],
-        rowMode: "array",
+        rowMode: "array"
     });
     if (result.rows.length !== 1) {
         return null;
@@ -42,7 +39,7 @@ export async function createUser(
         createdAt: row[1],
         updatedAt: row[2],
         name: row[3],
-        apiKey: row[4],
+        apiKey: row[4]
     };
 }
 
@@ -61,14 +58,11 @@ export interface GetUserByAPIKeyRow {
     apiKey: string;
 }
 
-export async function getUserByAPIKey(
-    client: Client,
-    args: GetUserByAPIKeyArgs,
-): Promise<GetUserByAPIKeyRow | null> {
+export async function getUserByAPIKey(client: Client, args: GetUserByAPIKeyArgs): Promise<GetUserByAPIKeyRow | null> {
     const result = await client.query({
         text: getUserByAPIKeyQuery,
         values: [args.apiKey],
-        rowMode: "array",
+        rowMode: "array"
     });
     if (result.rows.length !== 1) {
         return null;
@@ -79,6 +73,7 @@ export async function getUserByAPIKey(
         createdAt: row[1],
         updatedAt: row[2],
         name: row[3],
-        apiKey: row[4],
+        apiKey: row[4]
     };
 }
+

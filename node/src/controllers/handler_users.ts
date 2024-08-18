@@ -4,7 +4,6 @@ import { client } from "../db/client";
 import { uuidv7 } from "uuidv7";
 import { respondWithError, respondWithJSON } from "../json";
 import { logger } from "../utils/logger";
-import { getAPIKey } from "../db/auth";
 
 export async function handlerCreateUser(req: Request, res: Response) {
   try {
@@ -17,11 +16,11 @@ export async function handlerCreateUser(req: Request, res: Response) {
 
     const result = await createUser(client, {
       createdAt: new Date(),
-      id: uuidv7(),
       updatedAt: new Date(),
+      id: uuidv7(),
       name,
     });
-    console.log(result);
+    logger.info('Create user result:', result)
 
     if (!result) {
       return respondWithError(res, 500, "Couldn't create user");
@@ -39,6 +38,7 @@ export async function handlerGetUserByAPIKey(_: Request, res: Response) {
     const apiKey = res.locals.user
 
     const result = await getUserByAPIKey(client, { apiKey })
+    logger.info('Get user by API key result:', result)
     return respondWithJSON(res, 200, { data: result })
   } catch (err) {
     const errorMsg = "An error occured getting the users profile by api key"
@@ -46,19 +46,3 @@ export async function handlerGetUserByAPIKey(_: Request, res: Response) {
     return respondWithError(res, 500, errorMsg)
   }
 }
-
-
-// const postHandler = (req: Request, res: Response) => {
-//   const { name } = req.body;
-//   if (!name) {
-//     return res.status(400).send({ message: "Name is required!" });
-//   }
-
-//   const newUser = {
-//     id: userData.length + 1,
-//     name,
-//   };
-
-//   userData.push(newUser);
-//   return res.status(201).send({ data: newUser });
-// }
