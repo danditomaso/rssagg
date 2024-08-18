@@ -7,7 +7,7 @@ interface Client {
 export const createFeedQuery = `-- name: CreateFeed :one
 INSERT INTO feeds (id, created_at, updated_at, name, url, user_id)
 VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, created_at, updated_at, name, url, user_id`;
+RETURNING id, created_at, updated_at, name, url, last_fetched_at, user_id`;
 
 export interface CreateFeedArgs {
     id: string;
@@ -24,6 +24,7 @@ export interface CreateFeedRow {
     updatedAt: Date;
     name: string;
     url: string;
+    lastFetchedAt: Date | null;
     userId: string;
 }
 
@@ -43,12 +44,13 @@ export async function createFeed(client: Client, args: CreateFeedArgs): Promise<
         updatedAt: row[2],
         name: row[3],
         url: row[4],
-        userId: row[5]
+        lastFetchedAt: row[5],
+        userId: row[6]
     };
 }
 
 export const getFeedsQuery = `-- name: GetFeeds :many
-SELECT id, created_at, updated_at, name, url, user_id from feeds`;
+SELECT id, created_at, updated_at, name, url, last_fetched_at, user_id from feeds`;
 
 export interface GetFeedsRow {
     id: string;
@@ -56,6 +58,7 @@ export interface GetFeedsRow {
     updatedAt: Date;
     name: string;
     url: string;
+    lastFetchedAt: Date | null;
     userId: string;
 }
 
@@ -72,7 +75,8 @@ export async function getFeeds(client: Client): Promise<GetFeedsRow[]> {
             updatedAt: row[2],
             name: row[3],
             url: row[4],
-            userId: row[5]
+            lastFetchedAt: row[5],
+            userId: row[6]
         };
     });
 }

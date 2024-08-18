@@ -15,6 +15,7 @@ CREATE TABLE feeds (
   updated_at TIMESTAMP NOT NULL,
   name TEXT NOT NULL,
   url TEXT UNIQUE NOT NULL,
+  last_fetched_at TIMESTAMP,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE 
 );
 
@@ -24,6 +25,5 @@ CREATE TABLE feed_follows (
   updated_at TIMESTAMP NOT NULL,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   feed_id UUID NOT NULL REFERENCES feeds(id) ON DELETE CASCADE,
-  last_fetched_at TIMESTAMP,
   UNIQUE(user_id, feed_id)
 );

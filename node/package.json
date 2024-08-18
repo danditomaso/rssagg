@@ -5,9 +5,9 @@
 	"scripts": {
 		"dev": "bun run --watch ./src/app.ts",
 		"db:generate": "sqlc generate",
-		"migrate:up": "node-pg-migrate up -m ./sql/schema --envPath ../",
-		"migrate:down": "node-pg-migrate down -m ./sql/schema --envPath ../",
-		"migrate:redo": "node-pg-migrate redo -m ./sql/schema",
+		"migrate:up": "node-pg-migrate up -m ./src/sql/migrations --envPath ../",
+		"migrate:down": "node-pg-migrate down -m ./src/sql/migrations --envPath ../",
+		"migrate:redo": "node-pg-migrate redo -m ./src/sql/migrations",
 		"migrate:create": "node-pg-migrate create"
 	},
 	"dependencies": {

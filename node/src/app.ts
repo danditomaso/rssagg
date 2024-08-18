@@ -6,6 +6,7 @@ import express from "express";
 import { healthRouter } from "./routes/health";
 import { usersRouter } from "./routes/users";
 import { feedsRouter } from "./routes/feeds";
+import { feedFollowsRouter } from "./routes/feed_follows";
 import { errorHandler } from "./middleware/error";
 import envVars from "./envVars";
 import helmet from "helmet";
@@ -55,6 +56,8 @@ app.use(
 // Routes
 app.use('/v1/users', usersRouter);
 app.use('/v1/feeds', feedsRouter);
+app.use('/v1/feed', feedsRouter);
+app.use('/v1/feed_follows', feedFollowsRouter);
 app.use('/v1/health', healthRouter);
 
 // Error handling

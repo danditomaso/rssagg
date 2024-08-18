@@ -1,4 +1,4 @@
-import type { QueryArrayConfig, QueryArrayResult } from "pg";
+import { QueryArrayConfig, QueryArrayResult } from "pg";
 
 interface Client {
     query: (config: QueryArrayConfig) => Promise<QueryArrayResult>;
@@ -7,7 +7,7 @@ interface Client {
 export const createFeedFollowQuery = `-- name: CreateFeedFollow :one
 INSERT INTO feed_follows (id, created_at, updated_at, user_id, feed_id)
 VALUES ($1, $2, $3, $4, $5)
-RETURNING id, created_at, updated_at, user_id, feed_id, last_fetched_at`;
+RETURNING id, created_at, updated_at, user_id, feed_id`;
 
 export interface CreateFeedFollowArgs {
     id: string;
@@ -23,7 +23,6 @@ export interface CreateFeedFollowRow {
     updatedAt: Date;
     userId: string;
     feedId: string;
-    lastFetchedAt: Date | null;
 }
 
 export async function createFeedFollow(client: Client, args: CreateFeedFollowArgs): Promise<CreateFeedFollowRow | null> {
@@ -41,13 +40,12 @@ export async function createFeedFollow(client: Client, args: CreateFeedFollowArg
         createdAt: row[1],
         updatedAt: row[2],
         userId: row[3],
-        feedId: row[4],
-        lastFetchedAt: row[5]
+        feedId: row[4]
     };
 }
 
 export const getFeedFollowsQuery = `-- name: GetFeedFollows :many
-SELECT id, created_at, updated_at, user_id, feed_id, last_fetched_at FROM feed_follows WHERE user_id=$1`;
+SELECT id, created_at, updated_at, user_id, feed_id FROM feed_follows WHERE user_id=$1`;
 
 export interface GetFeedFollowsArgs {
     userId: string;
@@ -59,7 +57,6 @@ export interface GetFeedFollowsRow {
     updatedAt: Date;
     userId: string;
     feedId: string;
-    lastFetchedAt: Date | null;
 }
 
 export async function getFeedFollows(client: Client, args: GetFeedFollowsArgs): Promise<GetFeedFollowsRow[]> {
@@ -74,8 +71,7 @@ export async function getFeedFollows(client: Client, args: GetFeedFollowsArgs): 
             createdAt: row[1],
             updatedAt: row[2],
             userId: row[3],
-            feedId: row[4],
-            lastFetchedAt: row[5]
+            feedId: row[4]
         };
     });
 }
