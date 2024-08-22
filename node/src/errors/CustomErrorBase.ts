@@ -1,18 +1,11 @@
-type ErrorName =
-  | 'BAD_REQUEST'
-  | 'MISSING_AUTH'
-  | 'MALFORMED_AUTH'
-  | 'UNEXPECTED_AUTH_ERROR'
-
-
-type AppErrorProps = {
-  name: ErrorName;
+type CustomErorProps = {
+  name: string;
   message: string;
   cause?: unknown;
 }
 
-export class AppError extends Error {
-  name: ErrorName;
+export default abstract class CustomError extends Error {
+  name: string;
   message: string;
   cause: unknown;
 
@@ -20,7 +13,7 @@ export class AppError extends Error {
     name,
     message,
     cause,
-  }: AppErrorProps) {
+  }: CustomErorProps) {
     super();
     this.name = name
     this.message = message;

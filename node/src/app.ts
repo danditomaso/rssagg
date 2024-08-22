@@ -3,13 +3,11 @@ import compression from "compression";
 import express from "express";
 
 // Project dependencies
-import { healthRouter } from "./routes/health";
-import { usersRouter } from "./routes/users";
-import { feedsRouter } from "./routes/feeds";
-import { feedFollowsRouter } from "./routes/feed_follows";
-import { errorHandler } from "./middleware/error";
 import envVars from "./envVars";
 import helmet from "helmet";
+import { v1Router } from "./routes";
+import { startScraping } from "./scraper";
+import { client } from "./db/client";
 
 // Environment variable initialization
 const port = envVars?.NODE_PORT
@@ -45,22 +43,9 @@ app.use(
   })
 );
 
-// 404 Route
-// app.use('*', (req, res) => {
-//   res.status(404).json({
-//     message: `Can't find ${req.originalUrl} this route`,
-//   });
-// });
 
-
-// Routes
-app.use('/v1/users', usersRouter);
-app.use('/v1/feeds', feedsRouter);
-app.use('/v1/feed', feedsRouter);
-app.use('/v1/feed_follows', feedFollowsRouter);
-app.use('/v1/health', healthRouter);
-
-// Error handling
-app.use(errorHandler);
+startScraping({ client, limit: 4, timeBetweenRequests: '30seconds' })
+// v1 Router
+app.use('/v1', v1Router)
 
 export default app;
