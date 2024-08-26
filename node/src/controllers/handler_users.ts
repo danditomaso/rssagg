@@ -4,6 +4,7 @@ import { client } from "../db/client";
 import { uuidv7 } from "uuidv7";
 import { respondWithError, respondWithJSON } from "../json";
 import { logger } from "../utils/logger";
+import { getPostsForUser } from "../db/posts_sql";
 
 export async function handlerCreateUser(req: Request, res: Response) {
   try {
@@ -33,11 +34,11 @@ export async function handlerCreateUser(req: Request, res: Response) {
   }
 }
 
-export async function handlerGetUserByAPIKey(_: Request, res: Response) {
+export async function handlerGetUserByAPIKey(req: Request, res: Response) {
   try {
-    const apiKey = res.locals.user
+    const user = req.user
 
-    const result = await getUserByAPIKey(client, { apiKey })
+    const result = await getUserByAPIKey(client, { apiKey: user.apiKey })
     logger.info('Get user by API key result:', result)
     return respondWithJSON(res, 200, { data: result })
   } catch (err) {
@@ -45,4 +46,18 @@ export async function handlerGetUserByAPIKey(_: Request, res: Response) {
     logger.error(errorMsg, err)
     return respondWithError(res, 500, errorMsg)
   }
+}
+
+
+export async function handlerGetPostsForUser(req: Request, res: Response) {
+  try {
+    const user = req.user
+    const posts = await getPostsForUser(client, { userId: user.id, limit: "10" })
+    return respondWithJSON(res, 200, { data: posts })
+  } catch (err) {
+    const errorMsg = "Couldn't get posts"
+    logger.error(errorMsg, err)
+    return respondWithError(res, 500, errorMsg)
+  }
+
 }

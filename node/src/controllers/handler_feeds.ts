@@ -12,8 +12,6 @@ export async function handlerCreateFeed(req: Request, res: Response) {
 
     const user = req.user
 
-    console.log('user', user);
-
     if (!name) {
       return respondWithError(res, 400, "name property is required!");
     }

@@ -3,7 +3,7 @@ import { client } from "../db/client";
 import { uuidv7 } from "uuidv7";
 import { respondWithError, respondWithJSON } from "../json";
 import { logger } from "../utils/logger";
-import { createFeed, getFeeds } from "../db/feeds_sql";
+import { getFeeds } from "../db/feeds_sql";
 import { createFeedFollow, deleteFeedFollow } from "../db/feed_follows_sql";
 
 export async function handlerCreateFeedFollow(req: Request, res: Response) {
@@ -12,8 +12,6 @@ export async function handlerCreateFeedFollow(req: Request, res: Response) {
     logger.info(req.body);
 
     const user = req.user
-
-    console.log('user', user);
 
     if (!feed_id) {
       return respondWithError(res, 400, "feed_id property is required!");
@@ -55,8 +53,6 @@ export async function handlerDeleteFeedFollows(req: Request, res: Response) {
     logger.info(req.params);
 
     const user = req.user
-
-    console.log('user', user);
 
     if (!feedFollowId) {
       return respondWithError(res, 400, "feedFollowId property is required!");

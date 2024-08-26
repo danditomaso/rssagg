@@ -44,7 +44,7 @@ app.use(
 );
 
 
-startScraping({ client, limit: 4, timeBetweenRequests: '30seconds' })
+startScraping({ client, limit: 4, timeBetweenRequests: '4hours' })
 // v1 Router
 app.use('/v1', v1Router)
 
