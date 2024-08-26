@@ -2,6 +2,7 @@ import CustomError from './CustomErrorBase'
 
 type ErrorName =
   | 'BAD_PARAM'
+  | 'MISSING_PARAM'
   | 'DB_ERROR'
   | 'BAD_REQUEST'
   | 'ERROR_FETCHING'
