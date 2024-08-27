@@ -5,12 +5,12 @@ import { logger } from './utils/logger';
 dotenv.config({ path: "../.env" });
 
 const envSchema = z.object({
-  NODE_DB_URI: z.string(),
+  DATABASE_URL: z.string(),
   NODE_PORT: z.string().trim(),
 });
 
 const parsedVars = envSchema.parse({
-  NODE_DB_URI: process.env.NODE_DB_URI,
+  DATABASE_URL: process.env.DATABASE_URL,
   NODE_PORT: process.env.NODE_PORT,
 });
 

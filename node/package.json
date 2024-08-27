@@ -5,10 +5,10 @@
 	"scripts": {
 		"dev": "bun run --watch ./src/app.ts",
 		"db:generate": "sqlc generate",
-		"migrate:up": "node-pg-migrate up -m ./src/sql/migrations --envPath ../",
-		"migrate:down": "node-pg-migrate down -m ./src/sql/migrations --envPath ../",
-		"migrate:redo": "node-pg-migrate redo -m ./src/sql/migrations",
-		"migrate:create": "node-pg-migrate create"
+		"migrate:up": "node-pg-migrate up -m ./src/sql/migrations --envPath ../.env",
+		"migrate:down": "node-pg-migrate down -m ./src/sql/migrations --envPath ../.env",
+		"migrate:redo": "node-pg-migrate redo -m ./src/sql/migrations --envPath ../.env",
+		"migrate:create": "node-pg-migrate create -m ./src/sql/migrations --envPath ../.env"
 	},
 	"dependencies": {
 		"cors": "^2.8.5",

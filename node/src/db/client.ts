@@ -8,7 +8,7 @@ class Database {
 
   private constructor() {
     this.client = new Pool({
-      connectionString: envVars.NODE_DB_URI,
+      connectionString: envVars.DATABASE_URL,
     });
 
     this.client
